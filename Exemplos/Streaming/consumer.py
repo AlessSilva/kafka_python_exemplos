@@ -10,13 +10,14 @@ if __name__ == "__main__":
 
     # Caso 1 : Ler todas as mensagens do início (earliest) 
     #Caso 2: Ler apenas depois da última (latest)
-    # consumer = KafkaConsumer("usuarios", bootstrap_servers='127.0.0.1:9092', auto_offset_reset="earliest"
-    #                         , group_id="grupo_a", value_deserializer = lambda value: json.loads(value))
+    consumer = KafkaConsumer("usuarios", bootstrap_servers='127.0.0.1:9092', auto_offset_reset="earliest"
+                            , group_id="grupo_a", value_deserializer = lambda value: json.loads(value))
 
-    consumer = KafkaConsumer(bootstrap_servers='127.0.0.1:9092', auto_offset_reset="earliest"
-                           , group_id="grupo_g", value_deserializer = lambda value: json.loads(value))
-    topic = "teste3"
-    consumer.assign([TopicPartition(topic, 0)])
+    # consumer = KafkaConsumer(bootstrap_servers='127.0.0.1:9092', auto_offset_reset="earliest"
+    #                       , group_id="grupo_g", value_deserializer = lambda value: json.loads(value))
+    # Tópico específico
+    # topic = "teste3"
+    # consumer.assign([TopicPartition(topic, 0)])
 
     #Senha SASL/PLAIN
     # consumer = KafkaConsumer( "usuarios", bootstrap_servers='127.0.0.1:9092', auto_offset_reset="latest"
