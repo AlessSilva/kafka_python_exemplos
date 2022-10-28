@@ -1,0 +1,47 @@
+version: '3'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    networks: 
+      - broker-kafka
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181 #Porta para conexao com Zookeeper
+      ZOOKEEPER_TICK_TIME: 1000 #Unidade de tempo basica do Zookeeper
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    networks: 
+      - broker-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_BROKER_ID: 1  #ID unico para cada broker
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181  #Conexao com zookeeper
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092 #Necessario usando imagem Docker, como os clientes se conectarem 
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT #mapa entre nome de listerners e protocolos de seguranca
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT  #Comunicacao entre brokers 
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_LOG_RETENTION_MS: 120000 #Mensagens apos 2 minuto deverao ser deletadas
+      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 60000 #A cada 60 segundos as mensagens serao verificadas
+     
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop:latest
+    networks: 
+      - broker-kafka
+    depends_on:
+      - kafka
+    ports:
+      - 19000:9000 #http://localhost:19000/
+    environment:
+      KAFKA_BROKERCONNECT: kafka:29092
+
+networks: 
+  broker-kafka:
+    driver: bridge  
+
+# docker-compose -f docker-compose.yaml up -d
+# docker-compose -f docker-compose.yaml stop && docker-compose -f docker-compose.yaml rm -vf
+#BROKER_IP=$(ip -4 addr show $MAIN_INTERFACE | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
