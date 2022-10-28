@@ -17,27 +17,27 @@ if __name__ == "__main__":
         registro = gerar_RegistroUsuario()
         print(registro)
 
-        # #Caso 1
-        # producer.send( "usuarios", registro )
+        #Caso 1
+        producer.send( "usuarios", registro )
 
         #Caso 2
 
-        letra = registro["nome"][0]
+#         letra = registro["nome"][0]
 
-        if letra > "R":
+#         if letra > "R":
 
-            print("Registro enviado para partição 2 (STUVWXYZ)")
-            producer.send( "teste3", registro, partition=2 )
+#             print("Registro enviado para partição 2 (STUVWXYZ)")
+#             producer.send( "teste3", registro, partition=2 )
 
-        elif letra > "J":
+#         elif letra > "J":
 
-            print("Registro enviado para partição 1 (KLMNOPQR)")
-            producer.send( "teste3", registro, partition=1 )
+#             print("Registro enviado para partição 1 (KLMNOPQR)")
+#             producer.send( "teste3", registro, partition=1 )
 
-        else:
+#         else:
 
-            print("Registro enviado para partição 0 (ABCDEFGHJ)")
-            producer.send( "teste3", registro, partition=0 )
+#             print("Registro enviado para partição 0 (ABCDEFGHJ)")
+#             producer.send( "teste3", registro, partition=0 )
 
         # producer.send( "usuarios2", registro )
 
